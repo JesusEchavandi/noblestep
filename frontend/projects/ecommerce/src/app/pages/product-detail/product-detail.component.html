@@ -1,0 +1,129 @@
+<div class="product-detail-container">
+  <div class="container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a>
+      <span>/</span>
+      <a routerLink="/catalog">Catálogo</a>
+      <span>/</span>
+      <span *ngIf="product">{{ product.name }}</span>
+    </div>
+    
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando producto...</p>
+    </div>
+    
+    <div *ngIf="error && !loading" class="error-state">
+      <div class="error-icon">❌</div>
+      <h2>Producto no encontrado</h2>
+      <p>El producto que buscas no está disponible o no existe.</p>
+      <a routerLink="/catalog" class="btn btn-primary">Volver al Catálogo</a>
+    </div>
+    
+    <div *ngIf="product && !loading" class="product-detail">
+      <div class="product-gallery">
+        <div class="main-image">
+          <div class="image-placeholder">
+            <span class="placeholder-icon">📦</span>
+          </div>
+        </div>
+        <div class="image-info">
+          <p>💡 Las imágenes son referenciales</p>
+        </div>
+      </div>
+      
+      <div class="product-information">
+        <div class="category-badge">{{ product.categoryName }}</div>
+        <h1 class="product-title">{{ product.name }}</h1>
+        <p class="product-code">Código: <strong>{{ product.code }}</strong></p>
+        
+        <div class="price-box">
+          <div class="price-info">
+            <span class="price-label">Precio:</span>
+            <span class="price">{{ formatPrice(product.salePrice) }}</span>
+          </div>
+          
+          <div class="stock-info" [class.low-stock]="product.stock < 5">
+            <span *ngIf="product.stock > 0">✅ Disponible</span>
+            <span *ngIf="product.stock === 0">❌ Agotado</span>
+            <span class="stock-count">Stock: {{ product.stock }} unidades</span>
+          </div>
+        </div>
+        
+        <div class="product-description">
+          <h3>📝 Descripción</h3>
+          <p>{{ product.description }}</p>
+        </div>
+        
+        <div class="purchase-section" *ngIf="product.stock > 0">
+          <div class="quantity-selector">
+            <label>Cantidad:</label>
+            <div class="quantity-controls">
+              <button 
+                (click)="decreaseQuantity()" 
+                class="qty-btn"
+                [disabled]="quantity <= 1">
+                −
+              </button>
+              <input 
+                type="number" 
+                [(ngModel)]="quantity" 
+                [max]="product.stock"
+                [min]="1"
+                class="qty-input"
+                readonly>
+              <button 
+                (click)="increaseQuantity()" 
+                class="qty-btn"
+                [disabled]="quantity >= product.stock">
+                +
+              </button>
+            </div>
+          </div>
+          
+          <div class="total-price">
+            <span>Total:</span>
+            <strong>{{ formatPrice(product.salePrice * quantity) }}</strong>
+          </div>
+          
+          <button 
+            (click)="addToCart()" 
+            class="btn btn-primary btn-large btn-block">
+            🛒 Agregar al Carrito
+          </button>
+        </div>
+        
+        <div class="out-of-stock-message" *ngIf="product.stock === 0">
+          <p>⚠️ Este producto está temporalmente agotado</p>
+          <a routerLink="/catalog" class="btn btn-outline btn-block">
+            Ver otros productos
+          </a>
+        </div>
+        
+        <div class="product-features">
+          <div class="feature">
+            <span class="feature-icon">🚚</span>
+            <div>
+              <strong>Envío Rápido</strong>
+              <p>Entrega en 24-48 horas</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <div>
+              <strong>Garantía</strong>
+              <p>Producto garantizado</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">💳</span>
+            <div>
+              <strong>Pago Seguro</strong>
+              <p>Múltiples métodos de pago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

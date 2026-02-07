@@ -1,0 +1,128 @@
+<div class="contact-container">
+  <div class="container">
+    <h1 class="page-title">📧 Contáctanos</h1>
+    
+    <div class="contact-content">
+      <div class="contact-info">
+        <h2>Información de Contacto</h2>
+        <p class="intro">¿Tienes alguna pregunta? Estamos aquí para ayudarte.</p>
+        
+        <div class="info-items">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-details">
+              <h3>Dirección</h3>
+              <p>Lima, Perú</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">📧</div>
+            <div class="info-details">
+              <h3>Email</h3>
+              <p>info&#64;noblestep.com</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-details">
+              <h3>Teléfono</h3>
+              <p>+51 999 999 999</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">⏰</div>
+            <div class="info-details">
+              <h3>Horario</h3>
+              <p>Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+              <p>Sábados: 9:00 AM - 1:00 PM</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="social-section">
+          <h3>Síguenos</h3>
+          <div class="social-links">
+            <a href="#" class="social-btn">📘 Facebook</a>
+            <a href="#" class="social-btn">📷 Instagram</a>
+            <a href="#" class="social-btn">🐦 Twitter</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form-wrapper">
+        <div class="form-card">
+          <h2>Envíanos un Mensaje</h2>
+          
+          <div *ngIf="submitted && !error" class="alert alert-success">
+            ✅ ¡Mensaje enviado exitosamente! Te contactaremos pronto.
+          </div>
+          
+          <div *ngIf="error" class="alert alert-error">
+            ❌ Hubo un error al enviar el mensaje. Por favor intenta nuevamente.
+          </div>
+          
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Nombre Completo *</label>
+              <input 
+                type="text" 
+                id="name"
+                [(ngModel)]="contactForm.name"
+                name="name"
+                placeholder="Tu nombre"
+                required
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input 
+                type="email" 
+                id="email"
+                [(ngModel)]="contactForm.email"
+                name="email"
+                placeholder="tu@email.com"
+                required
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Teléfono *</label>
+              <input 
+                type="tel" 
+                id="phone"
+                [(ngModel)]="contactForm.phone"
+                name="phone"
+                placeholder="+51 999 999 999"
+                required
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Mensaje *</label>
+              <textarea 
+                id="message"
+                [(ngModel)]="contactForm.message"
+                name="message"
+                rows="5"
+                placeholder="Escribe tu mensaje aquí..."
+                required
+                class="form-control"></textarea>
+            </div>
+            
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-block btn-large"
+              [disabled]="!isFormValid() || submitting">
+              <span *ngIf="!submitting">📨 Enviar Mensaje</span>
+              <span *ngIf="submitting">Enviando...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,299 @@
+<div class="checkout-container">
+  <div class="container">
+    <h1 class="page-title">💳 Finalizar Compra</h1>
+    
+    <!-- Checkout Progress -->
+    <app-checkout-progress [currentStep]="1"></app-checkout-progress>
+    
+    <div class="checkout-content">
+      <!-- Formulario de checkout -->
+      <div class="checkout-form">
+        
+        <!-- Datos del Cliente -->
+        <div class="form-section">
+          <h2>📋 Datos de Envío</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre Completo *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="customerData.fullName"
+                placeholder="Ej: Juan Pérez García"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email *</label>
+              <input 
+                type="email" 
+                [(ngModel)]="customerData.email"
+                placeholder="ejemplo@correo.com"
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label>Teléfono *</label>
+              <input 
+                type="tel" 
+                [(ngModel)]="customerData.phone"
+                placeholder="987654321"
+                maxlength="9"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Dirección *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="customerData.address"
+                placeholder="Av. Principal 123"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ciudad *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="customerData.city"
+                placeholder="Lima"
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label>Distrito *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="customerData.district"
+                placeholder="Miraflores"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Referencia (opcional)</label>
+              <input 
+                type="text" 
+                [(ngModel)]="customerData.reference"
+                placeholder="Cerca al parque"
+                class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="form-section">
+          <h2>💰 Método de Pago</h2>
+          
+          <div class="payment-methods-grid">
+            <div 
+              class="payment-option"
+              [class.active]="paymentMethod === 'yape'"
+              (click)="selectPaymentMethod('yape')">
+              <img src="/logo_yape.png" alt="Yape" class="payment-logo">
+              <span>Yape</span>
+              <div class="check-icon" *ngIf="paymentMethod === 'yape'">✓</div>
+            </div>
+            
+            <div 
+              class="payment-option"
+              [class.active]="paymentMethod === 'card'"
+              (click)="selectPaymentMethod('card')">
+              <span class="payment-icon">💳</span>
+              <span>Tarjeta</span>
+              <div class="check-icon" *ngIf="paymentMethod === 'card'">✓</div>
+            </div>
+            
+            <div 
+              class="payment-option"
+              [class.active]="paymentMethod === 'transfer'"
+              (click)="selectPaymentMethod('transfer')">
+              <span class="payment-icon">🏦</span>
+              <span>Transferencia</span>
+              <div class="check-icon" *ngIf="paymentMethod === 'transfer'">✓</div>
+            </div>
+          </div>
+
+          <!-- Formulario Yape -->
+          <div *ngIf="paymentMethod === 'yape'" class="payment-form">
+            <div class="info-box">
+              <p>📱 Realiza el pago escaneando el código QR o enviando al número:</p>
+              <p class="highlight">999 999 999</p>
+              <p class="small">Luego ingresa tu número de celular para verificar el pago:</p>
+            </div>
+            
+            <div class="form-group">
+              <label>Tu número de Yape *</label>
+              <input 
+                type="tel" 
+                [(ngModel)]="paymentData.yapePhone"
+                placeholder="987654321"
+                maxlength="9"
+                class="form-control">
+            </div>
+          </div>
+
+          <!-- Formulario Tarjeta -->
+          <div *ngIf="paymentMethod === 'card'" class="payment-form">
+            <div class="form-group">
+              <label>Número de Tarjeta *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="paymentData.cardNumber"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label>Nombre en la Tarjeta *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="paymentData.cardName"
+                placeholder="JUAN PEREZ"
+                class="form-control">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Fecha de Expiración *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="paymentData.cardExpiry"
+                  placeholder="MM/AA"
+                  maxlength="5"
+                  class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label>CVV *</label>
+                <input 
+                  type="text" 
+                  [(ngModel)]="paymentData.cardCvv"
+                  placeholder="123"
+                  maxlength="3"
+                  class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulario Transferencia -->
+          <div *ngIf="paymentMethod === 'transfer'" class="payment-form">
+            <div class="info-box">
+              <p>🏦 Realiza la transferencia a nuestra cuenta:</p>
+              <p><strong>Banco:</strong> BCP</p>
+              <p><strong>Cuenta:</strong> 194-12345678-0-12</p>
+              <p><strong>CCI:</strong> 00219400123456780112</p>
+              <p class="small">Luego completa los datos de tu transferencia:</p>
+            </div>
+            
+            <div class="form-group">
+              <label>Banco de Origen *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="paymentData.transferBank"
+                placeholder="Ej: BCP, BBVA, Interbank"
+                class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label>Número de Operación *</label>
+              <input 
+                type="text" 
+                [(ngModel)]="paymentData.transferAccount"
+                placeholder="123456789"
+                class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="form-section">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="termsAccepted">
+            <span>Acepto los <a href="#" class="link">términos y condiciones</a> y la <a href="#" class="link">política de privacidad</a></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Resumen del Pedido -->
+      <div class="order-summary">
+        <div class="summary-card">
+          <h2>📦 Resumen del Pedido</h2>
+          
+          <div class="order-items">
+            <div class="order-item" *ngFor="let item of cartItems">
+              <div class="item-image">
+                <span>📦</span>
+              </div>
+              <div class="item-details">
+                <h4>{{ item.product.name }}</h4>
+                <p>Cantidad: {{ item.quantity }}</p>
+              </div>
+              <div class="item-price">
+                {{ formatPrice(item.product.salePrice * item.quantity) }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="summary-divider"></div>
+          
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>{{ formatPrice(getSubtotal()) }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Envío:</span>
+            <span [class.free]="getShipping() === 0">
+              {{ getShipping() === 0 ? 'Gratis' : formatPrice(getShipping()) }}
+            </span>
+          </div>
+          
+          <div class="summary-divider"></div>
+          
+          <div class="summary-row total">
+            <span>Total a Pagar:</span>
+            <span>{{ formatPrice(getTotal()) }}</span>
+          </div>
+          
+          <button 
+            (click)="processPayment()" 
+            class="btn btn-primary btn-block btn-large"
+            [disabled]="!isFormValid() || !termsAccepted || processing">
+            <span *ngIf="!processing">💳 Confirmar y Pagar</span>
+            <span *ngIf="processing">⏳ Procesando...</span>
+          </button>
+          
+          <button 
+            (click)="consultStock()" 
+            class="btn btn-outline btn-block">
+            💬 Consultar Stock por WhatsApp
+          </button>
+          
+          <a routerLink="/cart" class="btn btn-text btn-block">
+            ← Volver al Carrito
+          </a>
+          
+          <div class="trust-badges">
+            <div class="badge">
+              <span>🔒</span>
+              <span>Pago Seguro</span>
+            </div>
+            <div class="badge">
+              <span>✅</span>
+              <span>Garantizado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

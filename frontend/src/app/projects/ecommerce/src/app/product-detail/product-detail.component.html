@@ -1,0 +1,139 @@
+<!-- Header/Navbar -->
+<header class="header">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <h1>NobleStep Shop</h1>
+      </div>
+      <nav class="nav-links">
+        <a routerLink="/home">Inicio</a>
+        <a routerLink="/catalog">Catálogo</a>
+        <a href="#contact">Contacto</a>
+      </nav>
+      <div class="cart-icon">
+        <a [href]="getWhatsAppLink()" target="_blank" class="whatsapp-btn" *ngIf="cartCount() > 0">
+          🛒 Carrito ({{ cartCount() }})
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Loading -->
+<div *ngIf="loading()" class="loading-container">
+  <div class="container">
+    <p class="loading">Cargando producto...</p>
+  </div>
+</div>
+
+<!-- Product Detail -->
+<section class="product-detail" *ngIf="!loading() && product()">
+  <div class="container">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a routerLink="/home">Inicio</a>
+      <span>/</span>
+      <a routerLink="/catalog">Catálogo</a>
+      <span>/</span>
+      <span>{{ product()?.name }}</span>
+    </nav>
+
+    <div class="product-layout">
+      
+      <!-- Product Image -->
+      <div class="product-image-section">
+        <div class="main-image">
+          <img [src]="product()?.imageUrl || 'assets/no-image.png'" [alt]="product()?.name">
+          <span class="stock-badge" *ngIf="product()!.stock > 0">
+            Stock disponible: {{ product()!.stock }}
+          </span>
+          <span class="stock-badge out-of-stock" *ngIf="product()!.stock === 0">
+            Agotado
+          </span>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info-section">
+        <span class="category-tag">{{ product()?.categoryName }}</span>
+        <h1 class="product-title">{{ product()?.name }}</h1>
+        <p class="product-code">Código: {{ product()?.code }}</p>
+        
+        <div class="price-section">
+          <span class="price">S/ {{ product()!.salePrice.toFixed(2) }}</span>
+          <span class="stock-info" *ngIf="product()!.stock > 0">
+            ✓ Disponible
+          </span>
+        </div>
+
+        <div class="product-description">
+          <h3>Descripción</h3>
+          <p>{{ product()?.description }}</p>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="quantity-section" *ngIf="product()!.stock > 0">
+          <label>Cantidad:</label>
+          <div class="quantity-controls">
+            <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity() <= 1">
+              -
+            </button>
+            <input type="number" class="qty-input" [value]="quantity()" readonly>
+            <button class="qty-btn" (click)="increaseQuantity()" [disabled]="quantity() >= product()!.stock">
+              +
+            </button>
+          </div>
+          <span class="qty-info">Máximo: {{ product()!.stock }} unidades</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons" *ngIf="product()!.stock > 0">
+          <button class="btn-add-cart" (click)="addToCart()">
+            🛒 Agregar al Carrito
+          </button>
+          <button class="btn-buy-now" (click)="buyNow()">
+            📱 Comprar Ahora (WhatsApp)
+          </button>
+        </div>
+
+        <div class="out-of-stock-message" *ngIf="product()!.stock === 0">
+          <p>⚠️ Este producto está agotado actualmente.</p>
+          <a href="https://wa.me/51999999999?text=Hola,%20me%20interesa%20el%20producto%20{{product()?.name}}" 
+             target="_blank" 
+             class="btn-contact">
+            Consultar disponibilidad
+          </a>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="additional-info">
+          <div class="info-item">
+            <strong>📦 Entrega:</strong> Consultar con el vendedor
+          </div>
+          <div class="info-item">
+            <strong>💳 Pago:</strong> Efectivo, transferencia o tarjeta
+          </div>
+          <div class="info-item">
+            <strong>🔄 Devolución:</strong> Consultar políticas
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Back to Catalog -->
+    <div class="back-section">
+      <a routerLink="/catalog" class="btn-back">← Volver al Catálogo</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 NobleStep Shop. Todos los derechos reservados.</p>
+  </div>
+</footer>

@@ -1,0 +1,135 @@
+<div class="catalog-container">
+  <div class="container">
+    <h1 class="page-title">Catálogo de Productos</h1>
+    
+    <div class="catalog-layout">
+      <!-- Sidebar con filtros -->
+      <aside class="filters-sidebar">
+        <div class="filter-section">
+          <h3>🔍 Búsqueda</h3>
+          <div class="search-box">
+            <input 
+              type="text" 
+              [(ngModel)]="searchTerm" 
+              (keyup.enter)="onSearch()"
+              placeholder="Buscar productos..."
+              class="search-input">
+            <button (click)="onSearch()" class="search-btn">Buscar</button>
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3>📁 Categorías</h3>
+          <ul class="category-list">
+            <li>
+              <label class="category-item">
+                <input 
+                  type="radio" 
+                  name="category" 
+                  [checked]="selectedCategoryId === null"
+                  (change)="onCategoryChange(null)">
+                <span>Todas ({{ products.length }})</span>
+              </label>
+            </li>
+            <li *ngFor="let category of categories">
+              <label class="category-item">
+                <input 
+                  type="radio" 
+                  name="category" 
+                  [checked]="selectedCategoryId === category.id"
+                  (change)="onCategoryChange(category.id)">
+                <span>{{ category.name }} ({{ category.productCount }})</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="filter-section">
+          <h3>💰 Rango de Precio</h3>
+          <div class="price-filter">
+            <input 
+              type="number" 
+              [(ngModel)]="minPrice" 
+              placeholder="Mín"
+              class="price-input">
+            <span>-</span>
+            <input 
+              type="number" 
+              [(ngModel)]="maxPrice" 
+              placeholder="Máx"
+              class="price-input">
+          </div>
+          <button (click)="onPriceFilter()" class="btn btn-secondary btn-block">
+            Aplicar
+          </button>
+        </div>
+        
+        <button (click)="clearFilters()" class="btn btn-outline btn-block">
+          🔄 Limpiar Filtros
+        </button>
+      </aside>
+      
+      <!-- Área de productos -->
+      <main class="products-area">
+        <div class="products-header">
+          <p class="products-count">
+            <strong>{{ products.length }}</strong> productos encontrados
+          </p>
+        </div>
+        
+        <div *ngIf="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Cargando productos...</p>
+        </div>
+        
+        <div *ngIf="!loading && products.length === 0" class="empty-state">
+          <div class="empty-icon">📦</div>
+          <h3>No se encontraron productos</h3>
+          <p>Intenta ajustar los filtros de búsqueda</p>
+          <button (click)="clearFilters()" class="btn btn-primary">
+            Ver todos los productos
+          </button>
+        </div>
+        
+        <div *ngIf="!loading && products.length > 0" class="products-grid">
+          <div *ngFor="let product of products" class="product-card">
+            <div class="product-image">
+              <div class="image-placeholder">
+                <span class="placeholder-icon">📦</span>
+              </div>
+              <span class="category-badge">{{ product.categoryName }}</span>
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-name" [title]="product.name">{{ product.name }}</h3>
+              <p class="product-code">Código: {{ product.code }}</p>
+              <p class="product-description">{{ product.description }}</p>
+              
+              <div class="product-footer">
+                <div class="price-section">
+                  <span class="price">{{ formatPrice(product.salePrice) }}</span>
+                  <span class="stock" [class.low-stock]="product.stock < 5">
+                    Stock: {{ product.stock }}
+                  </span>
+                </div>
+                
+                <div class="product-actions">
+                  <a [routerLink]="['/product', product.id]" class="btn btn-secondary btn-sm">
+                    Ver
+                  </a>
+                  <button 
+                    (click)="addToCart(product)" 
+                    class="btn btn-primary btn-sm"
+                    [disabled]="product.stock === 0">
+                    <span *ngIf="product.stock > 0">🛒 Agregar</span>
+                    <span *ngIf="product.stock === 0">Sin Stock</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

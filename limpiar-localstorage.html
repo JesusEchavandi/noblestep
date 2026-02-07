@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar LocalStorage - NobleStep</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #5568d3;
+        }
+        .button-secondary {
+            background: #48bb78;
+        }
+        .button-secondary:hover {
+            background: #38a169;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        .status.info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+        .instructions {
+            text-align: left;
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 10px 0;
+        }
+        code {
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpiar LocalStorage</h1>
+        <p class="subtitle">NobleStep - Sistema de Gestión</p>
+        
+        <div id="status" class="status"></div>
+        
+        <button class="button" onclick="limpiarLocalStorage()">
+            🗑️ Limpiar LocalStorage
+        </button>
+        
+        <button class="button button-secondary" onclick="irAlSistema()">
+            🚀 Ir al Sistema
+        </button>
+        
+        <div class="instructions">
+            <strong>📋 Instrucciones:</strong>
+            <ol>
+                <li>Click en <strong>"Limpiar LocalStorage"</strong></li>
+                <li>Click en <strong>"Ir al Sistema"</strong></li>
+                <li>Inicia sesión:
+                    <ul>
+                        <li>Usuario: <code>admin</code></li>
+                        <li>Contraseña: <code>admin123</code></li>
+                    </ul>
+                </li>
+                <li>✅ Todos los datos deben aparecer ahora</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function limpiarLocalStorage() {
+            try {
+                // Limpiar todo el localStorage
+                localStorage.clear();
+                
+                // También limpiar sessionStorage por si acaso
+                sessionStorage.clear();
+                
+                // Mostrar mensaje de éxito
+                const status = document.getElementById('status');
+                status.className = 'status success';
+                status.style.display = 'block';
+                status.innerHTML = '✅ LocalStorage limpiado exitosamente!<br>Ahora puedes ir al sistema e iniciar sesión.';
+                
+                console.log('✅ LocalStorage limpiado');
+                console.log('✅ SessionStorage limpiado');
+                
+            } catch (error) {
+                const status = document.getElementById('status');
+                status.className = 'status info';
+                status.style.display = 'block';
+                status.innerHTML = '⚠️ Error: ' + error.message;
+            }
+        }
+        
+        function irAlSistema() {
+            // Redirigir al sistema
+            window.location.href = 'http://localhost:4200';
+        }
+        
+        // Mostrar información inicial
+        window.onload = function() {
+            const status = document.getElementById('status');
+            status.className = 'status info';
+            status.style.display = 'block';
+            status.innerHTML = 'ℹ️ Click en "Limpiar LocalStorage" para eliminar datos antiguos.';
+        };
+    </script>
+</body>
+</html>

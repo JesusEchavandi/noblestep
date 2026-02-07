@@ -1,0 +1,225 @@
+<div class="account-container">
+  <div class="account-header">
+    <h1>Mi Cuenta</h1>
+    <p>Bienvenido, {{ customer?.fullName }}</p>
+  </div>
+
+  <div class="account-content">
+    <!-- Sidebar Navigation -->
+    <div class="account-sidebar">
+      <nav class="account-nav">
+        <button 
+          class="nav-item" 
+          [class.active]="activeTab === 'orders'"
+          (click)="setActiveTab('orders')">
+          <i class="icon">📦</i>
+          <span>Mis Pedidos</span>
+        </button>
+        <button 
+          class="nav-item" 
+          [class.active]="activeTab === 'profile'"
+          (click)="setActiveTab('profile')">
+          <i class="icon">👤</i>
+          <span>Mi Perfil</span>
+        </button>
+        <button 
+          class="nav-item" 
+          [class.active]="activeTab === 'settings'"
+          (click)="setActiveTab('settings')">
+          <i class="icon">⚙️</i>
+          <span>Configuración</span>
+        </button>
+        <button class="nav-item logout" (click)="logout()">
+          <i class="icon">🚪</i>
+          <span>Cerrar Sesión</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="account-main">
+      <!-- Mis Pedidos -->
+      <div *ngIf="activeTab === 'orders'" class="tab-content">
+        <div class="tab-header">
+          <h2>Mis Pedidos</h2>
+          <p>Historial de todos tus pedidos</p>
+        </div>
+
+        <div *ngIf="loading" class="loading">Cargando pedidos...</div>
+
+        <div *ngIf="!loading && orders.length === 0" class="empty-state">
+          <p>No tienes pedidos aún</p>
+          <a routerLink="/catalog" class="btn-primary">Ir a Comprar</a>
+        </div>
+
+        <div *ngIf="!loading && orders.length > 0" class="orders-list">
+          <div *ngFor="let order of orders" class="order-card">
+            <div class="order-header">
+              <div class="order-info">
+                <h3>Pedido #{{ order.orderNumber }}</h3>
+                <p class="order-date">{{ formatDate(order.orderDate) }}</p>
+              </div>
+              <div class="order-status">
+                <span 
+                  class="status-badge" 
+                  [style.background-color]="getStatusColor(order.orderStatus)">
+                  {{ getStatusText(order.orderStatus) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="order-body">
+              <div class="order-items">
+                <div *ngFor="let item of order.items" class="order-item">
+                  <div class="item-info">
+                    <strong>{{ item.productName }}</strong>
+                    <small>{{ item.productCode }} - Talla: {{ item.productSize }}</small>
+                  </div>
+                  <div class="item-details">
+                    <span>Cantidad: {{ item.quantity }}</span>
+                    <strong>{{ formatPrice(item.subtotal) }}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-summary">
+                <div class="summary-row">
+                  <span>Subtotal:</span>
+                  <strong>{{ formatPrice(order.subtotal) }}</strong>
+                </div>
+                <div class="summary-row">
+                  <span>Envío:</span>
+                  <strong>{{ formatPrice(order.shippingCost) }}</strong>
+                </div>
+                <div class="summary-row total">
+                  <span>Total:</span>
+                  <strong>{{ formatPrice(order.total) }}</strong>
+                </div>
+              </div>
+
+              <div class="order-footer">
+                <div class="payment-info">
+                  <span>Método de pago: <strong>{{ order.paymentMethod }}</strong></span>
+                  <span>Estado de pago: <strong>{{ getPaymentStatusText(order.paymentStatus) }}</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mi Perfil -->
+      <div *ngIf="activeTab === 'profile'" class="tab-content">
+        <div class="tab-header">
+          <h2>Mi Perfil</h2>
+          <button *ngIf="!editingProfile" class="btn-secondary" (click)="toggleEditProfile()">
+            Editar Perfil
+          </button>
+        </div>
+
+        <div class="profile-content">
+          <div class="profile-section">
+            <h3>Información Personal</h3>
+            
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Nombre Completo</label>
+              <p>{{ customer?.fullName }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Nombre Completo</label>
+              <input type="text" [(ngModel)]="profileForm.fullName" />
+            </div>
+
+            <div class="form-group">
+              <label>Correo Electrónico</label>
+              <p>{{ customer?.email }}</p>
+              <small>El correo no se puede modificar</small>
+            </div>
+
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Teléfono</label>
+              <p>{{ customer?.phone || 'No especificado' }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Teléfono</label>
+              <input type="tel" [(ngModel)]="profileForm.phone" />
+            </div>
+
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Documento de Identidad</label>
+              <p>{{ customer?.documentNumber || 'No especificado' }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Documento de Identidad</label>
+              <input type="text" [(ngModel)]="profileForm.documentNumber" />
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Dirección de Envío</h3>
+
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Dirección</label>
+              <p>{{ customer?.address || 'No especificada' }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Dirección</label>
+              <input type="text" [(ngModel)]="profileForm.address" />
+            </div>
+
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Ciudad</label>
+              <p>{{ customer?.city || 'No especificada' }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Ciudad</label>
+              <input type="text" [(ngModel)]="profileForm.city" />
+            </div>
+
+            <div class="form-group" *ngIf="!editingProfile">
+              <label>Distrito</label>
+              <p>{{ customer?.district || 'No especificado' }}</p>
+            </div>
+            <div class="form-group" *ngIf="editingProfile">
+              <label>Distrito</label>
+              <input type="text" [(ngModel)]="profileForm.district" />
+            </div>
+          </div>
+
+          <div class="profile-actions" *ngIf="editingProfile">
+            <button class="btn-secondary" (click)="toggleEditProfile()">Cancelar</button>
+            <button class="btn-primary" (click)="saveProfile()" [disabled]="loading">
+              {{ loading ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuración -->
+      <div *ngIf="activeTab === 'settings'" class="tab-content">
+        <div class="tab-header">
+          <h2>Configuración</h2>
+        </div>
+
+        <div class="settings-content">
+          <div class="settings-section">
+            <h3>Cuenta</h3>
+            <p *ngIf="customer">Miembro desde: {{ formatDate(customer.createdAt) }}</p>
+            <p>Estado de email: {{ customer?.emailVerified ? 'Verificado' : 'No verificado' }}</p>
+          </div>
+
+          <div class="settings-section">
+            <h3>Seguridad</h3>
+            <p>Para cambiar tu contraseña, utiliza la opción "Olvidé mi contraseña" en la página de inicio de sesión.</p>
+          </div>
+
+          <div class="settings-section danger-zone">
+            <h3>Zona de Peligro</h3>
+            <p>Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, estate seguro.</p>
+            <button class="btn-danger" disabled>Eliminar Cuenta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

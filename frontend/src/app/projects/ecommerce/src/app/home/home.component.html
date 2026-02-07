@@ -1,0 +1,104 @@
+<!-- Header/Navbar -->
+<header class="header">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <h1>NobleStep Shop</h1>
+      </div>
+      <nav class="nav-links">
+        <a routerLink="/home">Inicio</a>
+        <a routerLink="/catalog">Catálogo</a>
+        <a href="#contact">Contacto</a>
+      </nav>
+      <div class="cart-icon">
+        <a [href]="getWhatsAppLink()" target="_blank" class="whatsapp-btn" *ngIf="cartCount() > 0">
+          🛒 Carrito ({{ cartCount() }})
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Bienvenido a NobleStep Shop</h1>
+      <p>Descubre nuestros productos de calidad</p>
+      <a routerLink="/catalog" class="btn-primary">Ver Catálogo</a>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories" *ngIf="categories().length > 0">
+  <div class="container">
+    <h2>Categorías</h2>
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories()" 
+           [routerLink]="['/catalog']" 
+           [queryParams]="{categoryId: category.id}">
+        <h3>{{ category.name }}</h3>
+        <p>{{ category.productCount }} productos</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-products">
+  <div class="container">
+    <h2>Productos Destacados</h2>
+    
+    <div *ngIf="loading()" class="loading">
+      Cargando productos...
+    </div>
+
+    <div class="products-grid" *ngIf="!loading()">
+      <div class="product-card" *ngFor="let product of featuredProducts()">
+        <div class="product-image" [routerLink]="['/product', product.id]">
+          <img [src]="product.imageUrl || 'assets/no-image.png'" [alt]="product.name">
+          <span class="stock-badge" *ngIf="product.stock > 0">Stock: {{ product.stock }}</span>
+          <span class="stock-badge out-of-stock" *ngIf="product.stock === 0">Agotado</span>
+        </div>
+        <div class="product-info">
+          <span class="category-tag">{{ product.categoryName }}</span>
+          <h3 [routerLink]="['/product', product.id]">{{ product.name }}</h3>
+          <p class="product-description">{{ product.description }}</p>
+          <div class="product-footer">
+            <span class="price">S/ {{ product.salePrice.toFixed(2) }}</span>
+            <button class="btn-add-cart" 
+                    (click)="addToCart(product, $event)"
+                    [disabled]="product.stock === 0">
+              {{ product.stock > 0 ? 'Agregar' : 'Agotado' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center" style="margin-top: 2rem;">
+      <a routerLink="/catalog" class="btn-secondary">Ver Todos los Productos</a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+  <div class="container">
+    <h2>Contáctanos</h2>
+    <p>¿Tienes alguna pregunta? ¡Escríbenos!</p>
+    <a href="https://wa.me/51999999999?text=Hola,%20tengo%20una%20consulta" 
+       target="_blank" 
+       class="btn-whatsapp">
+      📱 Enviar WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 NobleStep Shop. Todos los derechos reservados.</p>
+  </div>
+</footer>

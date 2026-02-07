@@ -1,0 +1,141 @@
+<!-- Header/Navbar -->
+<header class="header">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <h1>NobleStep Shop</h1>
+      </div>
+      <nav class="nav-links">
+        <a routerLink="/home">Inicio</a>
+        <a routerLink="/catalog" class="active">Catálogo</a>
+        <a href="#contact">Contacto</a>
+      </nav>
+      <div class="cart-icon">
+        <a [href]="getWhatsAppLink()" target="_blank" class="whatsapp-btn" *ngIf="cartCount() > 0">
+          🛒 Carrito ({{ cartCount() }})
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <h1>Catálogo de Productos</h1>
+    <p>Explora nuestra selección completa</p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<section class="catalog-content">
+  <div class="container">
+    <div class="catalog-layout">
+      
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar">
+        <div class="filter-section">
+          <h3>Búsqueda</h3>
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Buscar productos..."
+            [ngModel]="searchText()"
+            (ngModelChange)="onSearchChange($event)">
+        </div>
+
+        <div class="filter-section">
+          <h3>Categorías</h3>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input 
+                type="radio" 
+                name="category" 
+                [checked]="!selectedCategoryId()"
+                (change)="onCategoryChange(undefined)">
+              <span>Todas</span>
+            </label>
+            <label class="filter-option" *ngFor="let category of categories()">
+              <input 
+                type="radio" 
+                name="category" 
+                [checked]="selectedCategoryId() === category.id"
+                (change)="onCategoryChange(category.id)">
+              <span>{{ category.name }} ({{ category.productCount }})</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3>Rango de Precio</h3>
+          <div class="price-inputs">
+            <input 
+              type="number" 
+              placeholder="Mín"
+              [(ngModel)]="minPrice"
+              (change)="onPriceFilterChange()">
+            <span>-</span>
+            <input 
+              type="number" 
+              placeholder="Máx"
+              [(ngModel)]="maxPrice"
+              (change)="onPriceFilterChange()">
+          </div>
+        </div>
+
+        <button class="btn-clear-filters" (click)="clearFilters()">
+          Limpiar Filtros
+        </button>
+      </aside>
+
+      <!-- Products Grid -->
+      <main class="products-section">
+        
+        <div class="products-header">
+          <h2>{{ products().length }} Productos Encontrados</h2>
+        </div>
+
+        <div *ngIf="loading()" class="loading">
+          Cargando productos...
+        </div>
+
+        <div *ngIf="!loading() && products().length === 0" class="no-products">
+          <p>No se encontraron productos con los filtros seleccionados.</p>
+        </div>
+
+        <div class="products-grid" *ngIf="!loading() && products().length > 0">
+          <div class="product-card" *ngFor="let product of products()">
+            <div class="product-image" [routerLink]="['/product', product.id]">
+              <img [src]="product.imageUrl || 'assets/no-image.png'" [alt]="product.name">
+              <span class="stock-badge" *ngIf="product.stock > 0">Stock: {{ product.stock }}</span>
+              <span class="stock-badge out-of-stock" *ngIf="product.stock === 0">Agotado</span>
+            </div>
+            <div class="product-info">
+              <span class="category-tag">{{ product.categoryName }}</span>
+              <h3 [routerLink]="['/product', product.id]">{{ product.name }}</h3>
+              <p class="product-code">Código: {{ product.code }}</p>
+              <p class="product-description">{{ product.description }}</p>
+              <div class="product-footer">
+                <span class="price">S/ {{ product.salePrice.toFixed(2) }}</span>
+                <button class="btn-add-cart" 
+                        (click)="addToCart(product, $event)"
+                        [disabled]="product.stock === 0">
+                  {{ product.stock > 0 ? '+ Agregar' : 'Agotado' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 NobleStep Shop. Todos los derechos reservados.</p>
+  </div>
+</footer>
