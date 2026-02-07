@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: noblestep-api
+    env: dotnet
+    region: oregon
+    plan: free
+    buildCommand: dotnet publish backend/NobleStep.Api.csproj -c Release -o publish
+    startCommand: cd publish && dotnet NobleStep.Api.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: NobleStep
+      - key: Jwt__Audience
+        value: NobleStepUsers
