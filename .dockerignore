@@ -1,0 +1,40 @@
+# .dockerignore para optimizar el build de Docker
+
+# .NET
+backend/bin/
+backend/obj/
+backend/publish/
+backend/.vs/
+backend/*.user
+backend/*.suo
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Git
+.git/
+.gitignore
+
+# Documentación
+*.md
+!README.md
+
+# Temporales
+tmp/
+temp/
+*.tmp
+*.bak
+CORRIENDO_06_02_2026/
+ESPAÑOL/
+
+# Logs
+*.log
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

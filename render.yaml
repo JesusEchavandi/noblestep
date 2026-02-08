@@ -1,21 +1,28 @@
+# Render Blueprint para NobleStep
+# Este archivo configura el despliegue automático del backend en Render
+
 services:
+  # Backend API (.NET 8)
   - type: web
     name: noblestep-api
-    env: dotnet
-    region: oregon
+    runtime: docker
     plan: free
-    buildCommand: dotnet publish backend/NobleStep.Api.csproj -c Release -o publish
-    startCommand: cd publish && dotnet NobleStep.Api.dll
+    branch: main
+    buildCommand: dotnet publish backend/NobleStep.Api.csproj -c Release -o /app/publish
+    startCommand: dotnet /app/publish/NobleStep.Api.dll --urls "http://0.0.0.0:$PORT"
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ASPNETCORE_URLS
-        value: http://0.0.0.0:10000
       - key: ConnectionStrings__DefaultConnection
         sync: false
-      - key: Jwt__Key
+      - key: JwtSettings__SecretKey
         generateValue: true
-      - key: Jwt__Issuer
-        value: NobleStep
-      - key: Jwt__Audience
-        value: NobleStepUsers
+      - key: JwtSettings__Issuer
+        value: NobleStepAPI
+      - key: JwtSettings__Audience
+        value: NobleStepClient
+      - key: JwtSettings__ExpirationMinutes
+        value: 1440
+      - key: App__FrontendUrl
+        sync: false
+    healthCheckPath: /health

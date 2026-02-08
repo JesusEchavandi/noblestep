@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 interface Order {
   id: number;
@@ -553,7 +554,7 @@ export class EcommerceOrdersComponent implements OnInit {
   filterStatus = '';
   filterPaymentStatus = '';
 
-  private apiUrl = 'http://localhost:5000/api/admin/ecommerce-orders';
+  private apiUrl = `${environment.apiUrl}/admin/ecommerce-orders`;
 
   constructor(private http: HttpClient) {}
 

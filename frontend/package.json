@@ -5,10 +5,11 @@
     "ng": "ng",
     "start": "ng serve",
     "start:ecommerce": "ng serve ecommerce --port 4201",
-    "build": "ng build",
-    "build:ecommerce": "ng build ecommerce",
+    "build": "ng build --configuration production",
+    "build:ecommerce": "ng build ecommerce --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "vercel-build": "npm run build:ecommerce"
   },
   "private": true,
   "dependencies": {

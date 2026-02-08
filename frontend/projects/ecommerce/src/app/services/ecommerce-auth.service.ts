@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface EcommerceCustomer {
   id: number;
@@ -45,7 +46,7 @@ export interface UpdateProfileData {
   providedIn: 'root'
 })
 export class EcommerceAuthService {
-  private apiUrl = 'http://localhost:5000/api/ecommerce/auth';
+  private apiUrl = `${environment.apiUrl}/ecommerce/auth`;
   private currentCustomerSubject = new BehaviorSubject<EcommerceCustomer | null>(null);
   public currentCustomer$ = this.currentCustomerSubject.asObservable();
   
