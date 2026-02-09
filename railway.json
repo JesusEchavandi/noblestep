@@ -2,7 +2,7 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "dotnet publish backend/NobleStep.Api.csproj -c Release -o out"
+    "buildCommand": "cd backend && dotnet publish NobleStep.Api.csproj -c Release -o ../out"
   },
   "deploy": {
     "startCommand": "dotnet out/NobleStep.Api.dll",
