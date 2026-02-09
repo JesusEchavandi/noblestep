@@ -60,7 +60,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "http://localhost:4201")
+        // Obtener URLs permitidas desde configuración
+        var frontendUrls = builder.Configuration.GetValue<string>("App:FrontendUrl");
+        var allowedOrigins = new List<string> { "http://localhost:4200", "http://localhost:4201" };
+        
+        // Agregar URLs de producción si están configuradas
+        if (!string.IsNullOrEmpty(frontendUrls))
+        {
+            var productionUrls = frontendUrls.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                             .Select(url => url.Trim())
+                                             .ToArray();
+            allowedOrigins.AddRange(productionUrls);
+        }
+        
+        policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -112,15 +125,20 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+// Habilitar Swagger en todos los ambientes para debugging
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "NobleStep API v1");
-        c.RoutePrefix = string.Empty; // Swagger UI at root
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "NobleStep API v1");
+    c.RoutePrefix = "swagger"; // Swagger UI en /swagger
+});
+
+// Health check endpoint
+app.MapGet("/api/health", () => Results.Ok(new { 
+    status = "healthy", 
+    timestamp = DateTime.UtcNow,
+    environment = app.Environment.EnvironmentName 
+}));
 
 // CORS must be before authentication and authorization
 app.UseCors("AllowAngular");
