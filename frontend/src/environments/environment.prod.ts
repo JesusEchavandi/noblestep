@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://noblestep-api.onrender.com/api'
+  apiUrl: 'https://noblestep-production.up.railway.app/api'
 };
