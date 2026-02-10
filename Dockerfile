@@ -21,7 +21,8 @@ COPY --from=build /app/publish .
 EXPOSE 8080
 
 # Set environment variable for ASP.NET Core to listen on all interfaces
-ENV ASPNETCORE_URLS=http://+:8080
+# Railway sets the PORT variable dynamically, but we default to 8080
+ENV ASPNETCORE_URLS=http://+:${PORT:-8080}
 
 # Run the application
-ENTRYPOINT ["dotnet", "NobleStep.Api.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet NobleStep.Api.dll
