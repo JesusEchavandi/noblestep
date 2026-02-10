@@ -214,11 +214,11 @@ public class PurchasesController : ControllerBase
     public async Task<ActionResult<object>> GetPurchasesSummary()
     {
         var totalPurchases = await _context.Purchases
-            .Where(p => p.Status == "Completada")
+            .Where(p => p.Status == "Completada" || p.Status == "Completed")
             .SumAsync(p => (decimal?)p.Total) ?? 0;
 
         var totalCount = await _context.Purchases
-            .Where(p => p.Status == "Completada")
+            .Where(p => p.Status == "Completada" || p.Status == "Completed")
             .CountAsync();
 
         return Ok(new
