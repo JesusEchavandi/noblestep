@@ -427,27 +427,35 @@ export class SupplierListComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.saving) return;
+    
     this.saving = true;
 
     if (this.isEditMode) {
       this.supplierService.updateSupplier(this.editingId, this.supplier).subscribe({
         next: () => {
+          alert('✅ Proveedor actualizado correctamente');
           this.loadSuppliers();
           this.resetForm();
         },
         error: (error) => {
           console.error('Error al actualizar proveedor:', error);
+          const errorMsg = error?.error?.message || error?.message || 'Error al actualizar el proveedor';
+          alert('❌ Error: ' + errorMsg);
           this.saving = false;
         }
       });
     } else {
       this.supplierService.createSupplier(this.supplier).subscribe({
         next: () => {
+          alert('✅ Proveedor creado correctamente');
           this.loadSuppliers();
           this.resetForm();
         },
         error: (error) => {
           console.error('Error al crear proveedor:', error);
+          const errorMsg = error?.error?.message || error?.message || 'Error al crear el proveedor';
+          alert('❌ Error: ' + errorMsg);
           this.saving = false;
         }
       });
@@ -474,9 +482,14 @@ export class SupplierListComponent implements OnInit {
     if (confirm('¿Está seguro que desea eliminar este proveedor?')) {
       this.supplierService.deleteSupplier(id).subscribe({
         next: () => {
+          alert('✅ Proveedor eliminado correctamente');
           this.loadSuppliers();
         },
-        error: (error) => console.error('Error al eliminar proveedor:', error)
+        error: (error) => {
+          console.error('Error al eliminar proveedor:', error);
+          const errorMsg = error?.error?.message || error?.message || 'Error al eliminar el proveedor';
+          alert('❌ Error: ' + errorMsg);
+        }
       });
     }
   }
