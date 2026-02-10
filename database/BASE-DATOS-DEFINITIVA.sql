@@ -87,15 +87,19 @@ CREATE TABLE Customers (
 -- Tabla: Suppliers (Proveedores)
 CREATE TABLE Suppliers (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
+    CompanyName VARCHAR(100) NOT NULL,
+    ContactName VARCHAR(100) NOT NULL,
     DocumentNumber VARCHAR(20) NOT NULL UNIQUE,
-    Phone VARCHAR(20),
-    Email VARCHAR(100),
-    Address VARCHAR(255),
+    Phone VARCHAR(15) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Address VARCHAR(200),
+    City VARCHAR(100),
+    Country VARCHAR(100),
     IsActive TINYINT(1) NOT NULL DEFAULT 1,
     CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_name (Name)
+    INDEX idx_company_name (CompanyName),
+    INDEX idx_document_number (DocumentNumber)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla: Sales (Ventas del sistema)
@@ -324,12 +328,12 @@ INSERT INTO Customers (FullName, DocumentNumber, Phone, Email, Address, IsActive
 ('Isabel Romero Núñez', '01234567', '987654330', 'isabel.romero@email.com', 'Jr. Ancash 159, Breña', 1);
 
 -- ============= PROVEEDORES =============
-INSERT INTO Suppliers (Name, DocumentNumber, Phone, Email, Address, IsActive) VALUES
-('Distribuidora Nike Perú SAC', '20123456789', '015551234', 'ventas@nike.pe', 'Av. Javier Prado Este 123, Lima', 1),
-('Adidas Perú Importaciones', '20234567890', '015552345', 'pedidos@adidas.pe', 'Av. Larco 456, Miraflores', 1),
-('Calzados Bata Perú SA', '20345678901', '015553456', 'ventas@bata.com.pe', 'Jr. de la Unión 789, Lima', 1),
-('Importaciones Clarks SAC', '20456789012', '015554567', 'contacto@clarks.pe', 'Av. Benavides 321, Surco', 1),
-('Distribuidora Deportiva SAC', '20567890123', '015555678', 'ventas@distdeportiva.pe', 'Av. Colonial 654, Callao', 1);
+INSERT INTO Suppliers (CompanyName, ContactName, DocumentNumber, Phone, Email, Address, City, Country, IsActive) VALUES
+('Distribuidora Nike Perú SAC', 'Carlos Rodríguez', '20123456789', '015551234', 'ventas@nike.pe', 'Av. Javier Prado Este 123', 'Lima', 'Perú', 1),
+('Adidas Perú Importaciones', 'María González', '20234567890', '015552345', 'pedidos@adidas.pe', 'Av. Larco 456', 'Miraflores', 'Perú', 1),
+('Calzados Bata Perú SA', 'Jorge Sánchez', '20345678901', '015553456', 'ventas@bata.com.pe', 'Jr. de la Unión 789', 'Lima', 'Perú', 1),
+('Importaciones Clarks SAC', 'Ana Martínez', '20456789012', '015554567', 'contacto@clarks.pe', 'Av. Benavides 321', 'Surco', 'Perú', 1),
+('Distribuidora Deportiva SAC', 'Luis Torres', '20567890123', '015555678', 'ventas@distdeportiva.pe', 'Av. Colonial 654', 'Callao', 'Perú', 1);
 
 -- =============================================
 -- SECCIÓN 4: DATOS DE DEMOSTRACIÓN
