@@ -44,8 +44,6 @@ public class AppDbContext : DbContext
         
         // Ignorar propiedades que no existen en la BD
         modelBuilder.Entity<Sale>().Ignore(s => s.PaymentMethod);
-        modelBuilder.Entity<Purchase>().Ignore(p => p.Notes);
-        modelBuilder.Entity<Purchase>().Ignore(p => p.UpdatedAt);
 
         // User configuration
         modelBuilder.Entity<User>(entity =>

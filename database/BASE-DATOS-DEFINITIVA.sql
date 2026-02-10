@@ -139,15 +139,19 @@ CREATE TABLE Purchases (
     SupplierId INT NOT NULL,
     UserId INT NOT NULL,
     PurchaseDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    InvoiceNumber VARCHAR(50) NOT NULL,
     Total DECIMAL(18,2) NOT NULL,
     Status VARCHAR(20) NOT NULL DEFAULT 'Completed',
+    Notes VARCHAR(500) NULL,
     CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (SupplierId) REFERENCES Suppliers(Id),
     FOREIGN KEY (UserId) REFERENCES Users(Id),
     INDEX idx_supplier (SupplierId),
     INDEX idx_user (UserId),
     INDEX idx_date (PurchaseDate),
-    INDEX idx_status (Status)
+    INDEX idx_status (Status),
+    INDEX idx_invoice (InvoiceNumber)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabla: PurchaseDetails (Detalles de compras)
@@ -156,7 +160,7 @@ CREATE TABLE PurchaseDetails (
     PurchaseId INT NOT NULL,
     ProductId INT NOT NULL,
     Quantity INT NOT NULL,
-    UnitPrice DECIMAL(18,2) NOT NULL,
+    UnitCost DECIMAL(18,2) NOT NULL,
     Subtotal DECIMAL(18,2) NOT NULL,
     FOREIGN KEY (PurchaseId) REFERENCES Purchases(Id) ON DELETE CASCADE,
     FOREIGN KEY (ProductId) REFERENCES Products(Id),
