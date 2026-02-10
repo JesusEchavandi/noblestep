@@ -300,8 +300,10 @@ cd frontend && npm install && npm run build
 
 **Output Directory**:
 ```
-frontend/dist/browser
+frontend/dist/noblestep-web/browser
 ```
+
+⚠️ **IMPORTANTE**: El archivo `vercel.json` ya está incluido en el build automáticamente para manejar las rutas de Angular (SPA routing)
 
 4. Click en **"Deploy"**
 5. Espera 3-5 minutos
