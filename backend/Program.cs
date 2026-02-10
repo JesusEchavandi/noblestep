@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              .SetIsOriginAllowedToAllowWildcardSubdomains();
+              .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
