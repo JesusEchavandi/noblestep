@@ -60,27 +60,23 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        // Obtener URLs permitidas desde configuración
-        var frontendUrls = builder.Configuration.GetValue<string>("App:FrontendUrl");
-        var allowedOrigins = new List<string> { "http://localhost:4200", "http://localhost:4201" };
-        
-        // Agregar URLs de producción si están configuradas
-        if (!string.IsNullOrEmpty(frontendUrls))
+        // TEMPORAL: Permitir todos los orígenes de Vercel para debugging
+        policy.SetIsOriginAllowed(origin =>
         {
-            var productionUrls = frontendUrls.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                             .Select(url => url.Trim())
-                                             .ToArray();
-            allowedOrigins.AddRange(productionUrls);
-        }
-        
-        // DEBUG: Log allowed origins
-        Console.WriteLine($"[CORS] Allowed origins: {string.Join(", ", allowedOrigins)}");
-        
-        policy.WithOrigins(allowedOrigins.ToArray())
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials()
-              .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+            if (string.IsNullOrEmpty(origin)) return false;
+            
+            var uri = new Uri(origin);
+            var isLocalhost = uri.Host == "localhost" || uri.Host == "127.0.0.1";
+            var isVercel = uri.Host.EndsWith(".vercel.app");
+            
+            Console.WriteLine($"[CORS] Checking origin: {origin} -> localhost:{isLocalhost}, vercel:{isVercel}");
+            
+            return isLocalhost || isVercel;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
