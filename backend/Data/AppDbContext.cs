@@ -28,19 +28,19 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure table names to match MySQL (lowercase)
-        modelBuilder.Entity<User>().ToTable("users");
-        modelBuilder.Entity<Category>().ToTable("categories");
-        modelBuilder.Entity<Product>().ToTable("products");
-        modelBuilder.Entity<Customer>().ToTable("customers");
-        modelBuilder.Entity<Supplier>().ToTable("suppliers");
-        modelBuilder.Entity<Sale>().ToTable("sales");
-        modelBuilder.Entity<SaleDetail>().ToTable("saledetails");
-        modelBuilder.Entity<Purchase>().ToTable("purchases");
-        modelBuilder.Entity<PurchaseDetail>().ToTable("purchasedetails");
-        modelBuilder.Entity<EcommerceCustomer>().ToTable("ecommercecustomers");
-        modelBuilder.Entity<Order>().ToTable("orders");
-        modelBuilder.Entity<OrderDetail>().ToTable("orderdetails");
+        // Configure table names to match MySQL (PascalCase with uppercase first letter)
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<Category>().ToTable("Categories");
+        modelBuilder.Entity<Product>().ToTable("Products");
+        modelBuilder.Entity<Customer>().ToTable("Customers");
+        modelBuilder.Entity<Supplier>().ToTable("Suppliers");
+        modelBuilder.Entity<Sale>().ToTable("Sales");
+        modelBuilder.Entity<SaleDetail>().ToTable("SaleDetails");
+        modelBuilder.Entity<Purchase>().ToTable("Purchases");
+        modelBuilder.Entity<PurchaseDetail>().ToTable("PurchaseDetails");
+        modelBuilder.Entity<EcommerceCustomer>().ToTable("EcommerceCustomers");
+        modelBuilder.Entity<Order>().ToTable("Orders");
+        modelBuilder.Entity<OrderDetail>().ToTable("OrderDetails");
         
         // Ignorar propiedades que no existen en la BD
         modelBuilder.Entity<Sale>().Ignore(s => s.PaymentMethod);
