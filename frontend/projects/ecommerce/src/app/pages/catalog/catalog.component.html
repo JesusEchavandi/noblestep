@@ -3,8 +3,22 @@
     <h1 class="page-title">Catálogo de Productos</h1>
     
     <div class="catalog-layout">
+      <!-- Mobile Filter Toggle -->
+      <button class="filter-toggle-mobile" (click)="toggleFilters()">
+        <span>🔍</span>
+        <span>Filtros</span>
+        <span class="filter-count" *ngIf="hasActiveFilters()">{{ getActiveFilterCount() }}</span>
+      </button>
+
       <!-- Sidebar con filtros -->
-      <aside class="filters-sidebar">
+      <aside class="filters-sidebar" [class.open]="filtersOpen">
+        <!-- Close button for mobile -->
+        <button class="filter-close-mobile" (click)="closeFilters()">
+          ✕
+        </button>
+        
+        <h2 class="filters-title">Filtros</h2>
+        
         <div class="filter-section">
           <h3>🔍 Búsqueda</h3>
           <div class="search-box">
@@ -64,8 +78,12 @@
           </button>
         </div>
         
-        <button (click)="clearFilters()" class="btn btn-outline btn-block">
+        <button (click)="clearFilters()\" class=\"btn btn-outline btn-block\">
           🔄 Limpiar Filtros
+        </button>
+        
+        <button (click)="applyFilters()\" class=\"btn btn-primary btn-block filter-apply-mobile\">
+          Aplicar Filtros
         </button>
       </aside>
       

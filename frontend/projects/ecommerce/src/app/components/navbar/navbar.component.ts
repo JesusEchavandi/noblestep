@@ -16,25 +16,35 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
           <span class="logo-text">NobleStep Shop</span>
         </a>
         
-        <ul class="nav-links">
-          <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-          <li><a routerLink="/catalog" routerLinkActive="active">Catálogo</a></li>
-          <li><a routerLink="/contact" routerLinkActive="active">Contacto</a></li>
-        </ul>
+        <!-- Mobile Menu Toggle -->
+        <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         
-        <div class="nav-actions">
-          <a *ngIf="!isAuthenticated" routerLink="/login" class="login-button">
-            👤 Iniciar Sesión
-          </a>
-          <div *ngIf="isAuthenticated" class="user-menu">
-            <a routerLink="/account" class="user-button">
-              👤 {{ currentCustomer?.fullName }}
+        <!-- Navigation Menu -->
+        <div class="nav-menu" [class.open]="menuOpen">
+          <ul class="nav-links">
+            <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a></li>
+            <li><a routerLink="/catalog" routerLinkActive="active" (click)="closeMenu()">Catálogo</a></li>
+            <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contacto</a></li>
+          </ul>
+          
+          <div class="nav-actions">
+            <a *ngIf="!isAuthenticated" routerLink="/login" class="login-button" (click)="closeMenu()">
+              👤 <span class="btn-text">Iniciar Sesión</span>
+            </a>
+            <div *ngIf="isAuthenticated" class="user-menu">
+              <a routerLink="/account" class="user-button" (click)="closeMenu()">
+                👤 <span class="user-name">{{ currentCustomer?.fullName }}</span>
+              </a>
+            </div>
+            <a routerLink="/cart" class="cart-button" (click)="closeMenu()">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
             </a>
           </div>
-          <a routerLink="/cart" class="cart-button">
-            <span class="cart-icon">🛒</span>
-            <span class="cart-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
-          </a>
         </div>
       </div>
     </nav>
@@ -56,6 +66,7 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
 
     .logo {
@@ -66,12 +77,53 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
       color: var(--color-white);
       font-size: var(--font-size-2xl);
       font-weight: bold;
+      z-index: 1001;
     }
 
     .logo-img {
       height: 45px;
       width: auto;
       filter: brightness(0) invert(1);
+    }
+
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 5px;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--color-white);
+      transition: var(--transition-base);
+      border-radius: 2px;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Nav Menu */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2xl);
     }
 
     .nav-links {
@@ -87,6 +139,7 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
       text-decoration: none;
       font-weight: 500;
       transition: var(--transition-base);
+      padding: var(--spacing-sm);
     }
 
     .nav-links a:hover,
@@ -116,6 +169,7 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
       transition: var(--transition-base);
       font-weight: 500;
       box-shadow: var(--shadow-sm);
+      white-space: nowrap;
     }
 
     .login-button:hover,
@@ -141,13 +195,108 @@ import { EcommerceAuthService, EcommerceCustomer } from '../../services/ecommerc
       text-align: center;
     }
 
-    @media (max-width: 768px) {
-      .nav-links {
-        gap: var(--spacing-md);
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .menu-toggle {
+        display: flex;
       }
-      
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--color-dark);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 2rem 2rem;
+        gap: var(--spacing-xl);
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+        overflow-y: auto;
+      }
+
+      .nav-menu.open {
+        right: 0;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        width: 100%;
+      }
+
+      .nav-links li {
+        width: 100%;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: var(--spacing-md);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: var(--font-size-lg);
+      }
+
+      .nav-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--spacing-sm);
+      }
+
+      .login-button,
+      .user-button,
+      .cart-button {
+        width: 100%;
+        justify-content: center;
+        padding: var(--spacing-md);
+        font-size: var(--font-size-lg);
+      }
+
       .logo-text {
         display: none;
+      }
+
+      /* Overlay when menu is open */
+      .nav-menu.open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 280px;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 var(--spacing-md);
+      }
+
+      .logo-img {
+        height: 35px;
+      }
+
+      .nav-menu {
+        width: 100%;
+        right: -100%;
+      }
+
+      .nav-menu.open::before {
+        right: 0;
+      }
+
+      .btn-text {
+        display: inline;
+      }
+
+      .user-name {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   `]
@@ -156,6 +305,7 @@ export class NavbarComponent implements OnInit {
   cartItemCount = 0;
   currentCustomer: EcommerceCustomer | null = null;
   isAuthenticated = false;
+  menuOpen = false;
 
   constructor(
     private cartService: CartService,
@@ -171,6 +321,14 @@ export class NavbarComponent implements OnInit {
       this.currentCustomer = customer;
       this.isAuthenticated = !!customer;
     });
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
   }
 
   logout() {

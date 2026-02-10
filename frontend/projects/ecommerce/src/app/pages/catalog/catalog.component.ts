@@ -18,6 +18,7 @@ export class CatalogComponent implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
   loading = true;
+  filtersOpen = false;
   
   // Filtros
   selectedCategoryId: number | null = null;
@@ -87,6 +88,32 @@ export class CatalogComponent implements OnInit {
     this.minPrice = null;
     this.maxPrice = null;
     this.loadProducts();
+    this.closeFilters();
+  }
+
+  toggleFilters() {
+    this.filtersOpen = !this.filtersOpen;
+  }
+
+  closeFilters() {
+    this.filtersOpen = false;
+  }
+
+  applyFilters() {
+    this.loadProducts();
+    this.closeFilters();
+  }
+
+  hasActiveFilters(): boolean {
+    return !!(this.selectedCategoryId || this.searchTerm || this.minPrice || this.maxPrice);
+  }
+
+  getActiveFilterCount(): number {
+    let count = 0;
+    if (this.selectedCategoryId) count++;
+    if (this.searchTerm) count++;
+    if (this.minPrice || this.maxPrice) count++;
+    return count;
   }
 
   addToCart(product: Product) {
