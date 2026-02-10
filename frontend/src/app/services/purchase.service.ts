@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class PurchaseService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/Purchases`;
+  private apiUrl = `${environment.apiUrl}/purchases`;
 
   getPurchases(): Observable<Purchase[]> {
     return this.http.get<Purchase[]>(this.apiUrl);
@@ -24,10 +24,10 @@ export class PurchaseService {
   }
 
   getPurchasesSummary(): Observable<{ totalPurchases: number; totalCount: number }> {
-    return this.http.get<{ totalPurchases: number; totalCount: number }>(`${this.apiUrl}/Summary`);
+    return this.http.get<{ totalPurchases: number; totalCount: number }>(`${this.apiUrl}/summary`);
   }
 
   getPurchasesByDate(startDate: string, endDate: string): Observable<{ purchases: Purchase[]; totalPurchases: number }> {
-    return this.http.get<{ purchases: Purchase[]; totalPurchases: number }>(`${this.apiUrl}/ByDateRange?startDate=${startDate}&endDate=${endDate}`);
+    return this.http.get<{ purchases: Purchase[]; totalPurchases: number }>(`${this.apiUrl}/bydaterange?startDate=${startDate}&endDate=${endDate}`);
   }
 }

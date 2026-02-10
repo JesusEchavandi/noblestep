@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class SupplierService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/Suppliers`;
+  private apiUrl = `${environment.apiUrl}/suppliers`;
 
   getSuppliers(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(this.apiUrl);
