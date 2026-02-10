@@ -73,6 +73,9 @@ builder.Services.AddCors(options =>
             allowedOrigins.AddRange(productionUrls);
         }
         
+        // DEBUG: Log allowed origins
+        Console.WriteLine($"[CORS] Allowed origins: {string.Join(", ", allowedOrigins)}");
+        
         policy.WithOrigins(allowedOrigins.ToArray())
               .AllowAnyHeader()
               .AllowAnyMethod()
